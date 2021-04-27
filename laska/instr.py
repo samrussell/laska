@@ -1,7 +1,7 @@
 from capstone.x86_const import *
-from laska.reg import Reg
-from laska.imm import Imm
-from laska.mem import Mem
+from reg import Reg
+from imm import Imm
+from mem import Mem
 import capstone
 import re
 
@@ -37,14 +37,69 @@ class InstrPush(InstrBase):
 	NUM_OPERANDS = 1
 
 @set_constructor
+class InstrPop(InstrBase):
+	OPCODE = "pop"
+	NUM_OPERANDS = 1
+
+@set_constructor
+class InstrCmp(InstrBase):
+	OPCODE = "cmp"
+	NUM_OPERANDS = 2
+
+@set_constructor
 class InstrMov(InstrBase):
 	OPCODE = "mov"
+	NUM_OPERANDS = 2
+
+@set_constructor
+class InstrInc(InstrBase):
+	OPCODE = "inc"
+	NUM_OPERANDS = 1
+
+@set_constructor
+class InstrXor(InstrBase):
+	OPCODE = "xor"
+	NUM_OPERANDS = 2
+
+@set_constructor
+class InstrAdd(InstrBase):
+	OPCODE = "add"
+	NUM_OPERANDS = 2
+
+@set_constructor
+class InstrAdc(InstrBase):
+	OPCODE = "adc"
 	NUM_OPERANDS = 2
 
 @set_constructor
 class InstrSub(InstrBase):
 	OPCODE = "sub"
 	NUM_OPERANDS = 2
+
+@set_constructor
+class InstrInt(InstrBase):
+	OPCODE = "int"
+	NUM_OPERANDS = 1
+
+@set_constructor
+class InstrJb(InstrBase):
+	OPCODE = "jb"
+	NUM_OPERANDS = 1
+
+@set_constructor
+class InstrJne(InstrBase):
+	OPCODE = "jne"
+	NUM_OPERANDS = 1
+
+@set_constructor
+class InstrLoop(InstrBase):
+	OPCODE = "loop"
+	NUM_OPERANDS = 1
+
+@set_constructor
+class InstrRet(InstrBase):
+	OPCODE = "ret"
+	NUM_OPERANDS = 0
 
 def build_operand(capstone_operand):
 	if capstone_operand.type == X86_OP_REG:

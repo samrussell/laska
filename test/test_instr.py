@@ -1,7 +1,7 @@
 import unittest
 
 import capstone
-from laska.instr import *
+from instr import *
 
 class InstraTestCase(unittest.TestCase):
     def setUp(self):
@@ -29,3 +29,25 @@ class InstraTestCase(unittest.TestCase):
         instruction = next(instructions)
         instr = build_instr(instruction)
         self.assertEqual(InstrMov(Mem(None, Reg.BP, -4), Imm(0)), instr)
+
+    def test_mov_ax_bp_ptr(self):
+        data = b'\x8B\x46\x06'
+        instructions = self.md.disasm(data, 0x1234)
+        instruction = next(instructions)
+        instr = build_instr(instruction)
+        self.assertEqual(InstrMov(Reg(Reg.AX), Mem(None, Reg.BP, 6)), instr)
+
+    def test_int_21(self):
+        data = b'\xCD\x21'
+        instructions = self.md.disasm(data, 0x1234)
+        instruction = next(instructions)
+        instr = build_instr(instruction)
+        self.assertEqual(InstrInt(Imm(0x21)), instr)
+
+    def test_jb(self):
+        data = b'\x72\x65'
+        instructions = self.md.disasm(data, 0x1234)
+        instruction = next(instructions)
+        instr = build_instr(instruction)
+        dest = 0x1234 + len(data) + 0x65
+        self.assertEqual(InstrJb(Imm(dest)), instr)
